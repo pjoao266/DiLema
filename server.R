@@ -7,7 +7,7 @@ source('functions/functions.R')
 shinyServer(function(input, output) {
   
   aux = reactiveValues(n_palavras = 2,
-                       max_tentativa=8,
+                       max_tentativa=7,
                        n_tentativa = 1,
                        day = 1+interval(dia_inicio, today()) %/% days(1),
                        palavra_escolhida = NULL,
@@ -331,7 +331,11 @@ shinyServer(function(input, output) {
       title = p(h2('Perdeu!!',class='red-text'),
                 h3(palavras))
     }else{
-      title = h2('Ganhou!!',class='green-text')
+      for (i in 1:aux$n_palavras) {
+        palavras[[i]] = aux$palavra_escolhida[i]
+      }
+      title = p(h2('Ganhou!!',class='green-text'),
+                h3(palavras))
     }
     
     div(list(title,div(class = "endgame-content",div_list)))

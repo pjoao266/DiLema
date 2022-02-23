@@ -1,4 +1,4 @@
-my_packages = c("dplyr",'stringr','shinyjs','lubridate')
+my_packages = c("dplyr",'stringr','shinyjs','lubridate','shiny','htmltools')
 
 install_if_missing = function(p) {
   if (p %in% rownames(installed.packages()) == FALSE) {
