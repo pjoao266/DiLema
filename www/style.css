@@ -147,10 +147,11 @@
 
 .endgame-content {
   font-family: Helvetica, Arial, sans-serif;
-  display: inline-block;
+  display: block;
+  text-align:center;
   line-height: 1.4;
   letter-spacing: .2em;
-  margin: 20px 8px;
+  margin: 20px auto;
   width: fit-content;
   padding: 20px;
   border-radius: 5px;
@@ -159,7 +160,22 @@
 
 .red-text{
   color:red;
+  text-align: center;
 }
 .green-text{
   color:green;
+  text-align: center;
+}
+.palavras-sort{
+  text-align: center;
+}
+
+.botoes-content {
+  font-family: Helvetica, Arial, sans-serif;
+  display: block;
+  text-align:center;
+  line-height: 1.4;
+  letter-spacing: .2em;
+  margin: 20px auto;
+  width: fit-content;
 }

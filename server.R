@@ -15,6 +15,8 @@ shinyServer(function(input, output) {
                        info_tentativas = list(),
                        acertou = c(),
                        acabou = FALSE,
+                       exibe_modal=T,
+                       clicks=0,
                        palavra_existe = T,
                        lines = NULL,
                        letras = character(0))
@@ -34,6 +36,7 @@ shinyServer(function(input, output) {
   
   
   reset_game <- function() {
+    removeModal()
     #set.seed(aux$day)
     aux$palavra_escolhida= sample(palavras_elegiveis, aux$n_palavras)
     aux$acertou = c()
@@ -101,7 +104,6 @@ shinyServer(function(input, output) {
   })
   
   output$current_guess <- renderUI({
-    if (aux$acabou) return()
     req(aux$palavra_escolhida)
     palavras = list()
     for (k in 1:aux$n_palavras) {
@@ -153,16 +155,11 @@ shinyServer(function(input, output) {
     div(palavras,class='caixa_palavras')
   })
   
-  output$new_game_ui <- renderUI({
-    if (!aux$acabou)
-      return()
-    div(actionButton("new_game", "New Game"),
-        actionButton("copy", "Copy"))
-  })
   
   observeEvent(input$new_game, {
     reset_game()
   })
+  
   observeEvent(input$copy,{
     acertou = ifelse(aux$acertou == 0, aux$max_tentativa, aux$acertou) 
     max_tent = max(acertou)
@@ -217,7 +214,6 @@ shinyServer(function(input, output) {
   )
   
   output$keyboard <- renderUI({
-    if (aux$acabou) return()
     cont_rows = 0
     keyboard_list = list()
     for (row_key in keys) {
@@ -252,7 +248,7 @@ shinyServer(function(input, output) {
       keyboard_list[[cont_rows]] = div(row_keys,class = "keyboard-row")
       
     }
-    div(keyboard_list,class = "keyboard")
+    div(keyboard_list,class = "keyboard", id='keyboard-div')
   })
   
   # Add listeners for each key, except Enter and Back
@@ -282,9 +278,29 @@ shinyServer(function(input, output) {
     }
   })
   
+  onclick("guesses-div", {
+    if (aux$acabou==T){
+      aux$exibe_modal=T
+      aux$clicks = aux$clicks + 1
+    }
+      
+      
+  })
+  onclick("keyboard-div", {
+    if (aux$acabou==T){
+      aux$exibe_modal=T
+      aux$clicks = aux$clicks + 1
+    }
+    
+    
+  })
   output$endgame <- renderUI({
     if (!aux$acabou)
       return()
+    if (!aux$exibe_modal)
+      return()
+    
+    n_clicks = aux$clicks
     line_list = list()
     div_list=list()
     i_list = list()
@@ -325,20 +341,37 @@ shinyServer(function(input, output) {
     }
     if(0 %in% aux$acertou){
       palavras = list()
+      palavras[[1]] = "Palavras: "
       for (i in 1:aux$n_palavras) {
-        palavras[[i]] = aux$palavra_escolhida[i]
+        palavras[[i+1]] = aux$palavra_escolhida[i]
       }
       title = p(h2('Perdeu!!',class='red-text'),
-                h3(palavras))
+                h3(palavras,class='palavras-sort'))
     }else{
+      palavras = list()
+      palavras[[1]] = "Palavras: "
       for (i in 1:aux$n_palavras) {
-        palavras[[i]] = aux$palavra_escolhida[i]
+        
+        if(i!=aux$n_palavras){
+          palavras[[i+1]] = paste0(aux$palavra_escolhida[i], " & ")
+        }else{
+          palavras[[i+1]] = aux$palavra_escolhida[i]
+        }
       }
       title = p(h2('Ganhou!!',class='green-text'),
-                h3(palavras))
+                h3(palavras,class='palavras-sort'))
     }
     
-    div(list(title,div(class = "endgame-content",div_list)))
+    showModal(modalDialog(
+      
+      div(list(title,div(class = "endgame-content",div_list))),
+      div(actionButton("new_game", "New Game"),
+          actionButton("copy", "Copy"), class='botoes-content'),
+      footer = NULL,
+      easyClose = TRUE,
+      size = "l")
+    )
+    
   })
   
 })

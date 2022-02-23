@@ -16,11 +16,10 @@ shinyUI(fluidPage(
   tags$link(rel = "icon", type = "image/png", sizes = "16x16", href = "2.png"),
   tags$head(HTML("<script type='text/javascript' src='script.js'></script>")),
   div(
-    class = "guesses",
+    class = "guesses", id="guesses-div",
     h3("DiLema"),
     uiOutput("current_guess"),
-    uiOutput("endgame"),
-    uiOutput("new_game_ui")
+    uiOutput("endgame")
   ),
   useShinyjs(),
   uiOutput("keyboard")

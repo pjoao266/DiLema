@@ -1,3 +1,7 @@
+var n_clicks = 0;
+function click(){
+  n_clicks = n_clicks + 1;
+}
 function copyTextToClipboard(text) {
   if (!navigator.clipboard) {
     fallbackCopyTextToClipboard(text);
