@@ -1,6 +1,7 @@
 if(!require(shiny)) install.packages('shiny');require(shiny)
 if(!require(htmltools)) install.packages('htmltools');require(htmltools)
 if(!require(dplyr)) install.packages('dplyr');require(dplyr)
+if(!require(lubridate)) install.packages('lubridate');require(lubridate)
 if(!require(stringr)) install.packages('stringr');require(stringr)
 if(!require(shinyjs)) install.packages('shinyjs');require(shinyjs)
 
