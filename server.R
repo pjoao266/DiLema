@@ -188,22 +188,18 @@ shinyServer(function(input, output) {
     }
     cores = paste(linha,collapse = '\\n')
     
-    if(!0 %in% aux$acertou){
-      acertos = paste0(aux$acertou, "\\\\", aux$max_tentativa, collapse=" & ")
-    }else{
-      texto_acertos = c()
-      for (i in 1:aux$n_palavras) {
-        if(aux$acertou[i]==0){
-          texto_acertos[i] = 'fail'
-        }else{
-          texto_acertos[i] = paste0(aux$acertou[i], "\\\\", aux$max_tentativa)
-        }
-        acertos = paste0(texto_acertos, collapse=" & ")
-      }
-      
+    
+    texto = c()
+    for (i in 1:aux$n_palavras) {
+      palavra = aux$palavra_escolhida[i]
+      acertou = ifelse(aux$acertou[i]==0, 'fail',paste0(aux$acertou[i],"\\\\",aux$max_tentativa))
+      texto[i] = paste0(palavra," (",acertou,")")
     }
-    linha_inicial = paste0('joguei odilema.herokuapp.com #',aux$day,' ',acertos)
-    lines = paste(linha_inicial,cores, sep='\\n \\n')
+    texto_linha = paste0("Palavras: ",paste0(texto,collapse = " & "))
+    
+    linha_inicial = paste0('joguei odilema.herokuapp.com')
+    
+    lines = paste(linha_inicial, texto_linha, cores, sep='\\n \\n')
     runjs(paste0('copyTextToClipboard("',lines,'");'))
   })
   
