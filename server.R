@@ -1,11 +1,13 @@
 library(shiny)
-dia_inicio = "2022-02-18"
+dia_inicio = "2022-02-23"
+
 dicionario = readRDS('dados/palavras.RDS')
+palavras_elegiveis = readRDS('dados/palavras_elegiveis.RDS')
 source('functions/functions.R')
 shinyServer(function(input, output) {
   
   aux = reactiveValues(n_palavras = 2,
-                       max_tentativa=7,
+                       max_tentativa=8,
                        n_tentativa = 1,
                        day = 1+interval(dia_inicio, today()) %/% days(1),
                        palavra_escolhida = NULL,
@@ -19,7 +21,7 @@ shinyServer(function(input, output) {
   
   observeEvent(aux$day,{
     #set.seed(aux$day)
-    aux$palavra_escolhida= sample(dicionario, aux$n_palavras)
+    aux$palavra_escolhida= sample(palavras_elegiveis, aux$n_palavras)
     for (k in 1:aux$n_palavras) {
       aux$info_tentativas[[k]] = list()
       aux$matches_letras[[k]] = list()
@@ -33,7 +35,7 @@ shinyServer(function(input, output) {
   
   reset_game <- function() {
     #set.seed(aux$day)
-    aux$palavra_escolhida= sample(dicionario, aux$n_palavras)
+    aux$palavra_escolhida= sample(palavras_elegiveis, aux$n_palavras)
     aux$acertou = c()
     aux$letras = character(0)
     aux$info_tentativas = list()
@@ -203,7 +205,7 @@ shinyServer(function(input, output) {
       }
       
     }
-    linha_inicial = paste0('joguei teste.com #',aux$day,' ',acertos)
+    linha_inicial = paste0('joguei odilema.herokuapp.com #',aux$day,' ',acertos)
     lines = paste(linha_inicial,cores, sep='\\n \\n')
     runjs(paste0('copyTextToClipboard("',lines,'");'))
   })
