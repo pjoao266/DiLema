@@ -17,6 +17,7 @@ shinyServer(function(input, output) {
                        acabou = FALSE,
                        exibe_modal=T,
                        clicks=0,
+                       segundos = 0,
                        palavra_existe = T,
                        lines = NULL,
                        letras = character(0))
@@ -33,7 +34,12 @@ shinyServer(function(input, output) {
   
   observeEvent(aux$palavra_escolhida,print(aux$palavra_escolhida))
   
-  
+  observe({
+    invalidateLater(3000)
+    
+    aux$segundos = aux$segundos + 3
+  })
+
   
   reset_game <- function() {
     removeModal()
@@ -196,7 +202,6 @@ shinyServer(function(input, output) {
       texto[i] = paste0(palavra," (",acertou,")")
     }
     texto_linha = paste0("Palavras: ",paste0(texto,collapse = " & "))
-    
     linha_inicial = paste0('joguei odilema.herokuapp.com')
     
     lines = paste(linha_inicial, texto_linha, cores, sep='\\n \\n')
