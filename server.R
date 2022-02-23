@@ -7,7 +7,7 @@ shinyServer(function(input, output) {
   aux = reactiveValues(n_palavras = 2,
                        max_tentativa=7,
                        n_tentativa = 1,
-                       day = 1+interval(dia_inicio, today()) %/% days(1),
+                       day = 1,
                        palavra_escolhida = NULL,
                        matches_letras = list(),
                        info_tentativas = list(),
@@ -204,7 +204,7 @@ shinyServer(function(input, output) {
       }
       
     }
-    linha_inicial = paste0('joguei teste.com #',aux$day,' ',acertos)
+    linha_inicial = paste0('joguei teste.com ',acertos)
     lines = paste(linha_inicial,cores, sep='\\n \\n')
     runjs(paste0('copyTextToClipboard("',lines,'");'))
   })
